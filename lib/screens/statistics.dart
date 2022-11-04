@@ -1,13 +1,19 @@
+import 'package:app/widgets/side_menu.dart';
 import 'package:flutter/material.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class StatisticsPage extends StatelessWidget {
+class StatisticsPage extends StatefulWidget {
   StatisticsPage({super.key});
 
+  @override
+  State<StatisticsPage> createState() => _StatisticsPageState();
+}
+
+class _StatisticsPageState extends State<StatisticsPage> {
   Map<String, dynamic> mockedData = {
     "food_level": 67.0,
-    "water_level": 99.0,
+    "water_level": 85.0,
     "history": {
       "food": [71, 84, 48, 80, 74, 67],
       "water": [57, 99, 39, 67, 49, 87]
@@ -56,14 +62,14 @@ class StatisticsPage extends StatelessWidget {
             color: Colors.blue,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            // TODO: Open the drawer
           },
         ),
         backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
       ),
-      drawer: const Drawer(),
+      drawer: SideMenu(),
       body: Column(
         children: [
           Container(
@@ -212,10 +218,13 @@ class StatisticsPage extends StatelessWidget {
           ),
           Row(
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                margin: const EdgeInsets.only(left: 20),
-                child: _getPetsTable(),
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: const EdgeInsets.only(left: 20),
+                  child: _getPetsTable(),
+                ),
               ),
             ],
           ),
@@ -259,12 +268,26 @@ class StatisticsPage extends StatelessWidget {
     return _buildTrackerColumnChart(status);
   }
 
-  Widget _getPetsTable() {
+  Table _getPetsTable() {
     final pets = mockedData["pets"];
 
+    Table table = Table(
+      border: TableBorder(
+        horizontalInside: BorderSide(
+          color: Color.fromRGBO(0, 0, 0, 0.1),
+          width: 1,
+        ),
+      ),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: _getRows(pets),
+    );
+
+    return table;
+  }
+
+  List<TableRow> _getRows(pets) {
     List<TableRow> rows = [];
 
-    // Table headers
     rows.add(TableRow(
       children: [
         Container(
@@ -272,7 +295,6 @@ class StatisticsPage extends StatelessWidget {
           child: Text(""),
         ),
         Container(
-          padding: const EdgeInsets.all(8),
           child: Text(
             "Name",
             style: TextStyle(
@@ -282,7 +304,6 @@ class StatisticsPage extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.all(8),
           child: Text(
             "Age",
             style: TextStyle(
@@ -292,7 +313,6 @@ class StatisticsPage extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.all(8),
           child: Text(
             "Status",
             style: TextStyle(
@@ -302,7 +322,6 @@ class StatisticsPage extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.all(8),
           child: Text(
             "Weight",
             style: TextStyle(
@@ -316,11 +335,14 @@ class StatisticsPage extends StatelessWidget {
 
     for (var i = 0; i < pets.length; i++) {
       rows.add(TableRow(children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TableCell(
+        TableCell(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
-                radius: 20, backgroundImage: NetworkImage(pets[i]["image"])),
+              radius: 20,
+              backgroundImage: NetworkImage(pets[i]["image"]),
+              backgroundColor: Colors.grey,
+            ),
           ),
         ),
         TableCell(
@@ -338,16 +360,7 @@ class StatisticsPage extends StatelessWidget {
       ]));
     }
 
-    return Table(
-      border: TableBorder(
-        horizontalInside: BorderSide(
-          color: Color.fromRGBO(0, 0, 0, 0.1),
-          width: 1,
-        ),
-      ),
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: rows,
-    );
+    return rows;
   }
 
   /// Returns the circular charts with center elevation dughnut series.
