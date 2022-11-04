@@ -200,8 +200,11 @@ class StatisticsPage extends StatelessWidget {
                   children: [
                     TableRow(
                       children: [
-                        TableCell(
-                          child: Text(""),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TableCell(
+                            child: Text(""),
+                          ),
                         ),
                         TableCell(
                           child: Text(
