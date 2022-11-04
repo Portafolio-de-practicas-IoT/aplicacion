@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         '/automations': (context) => AutomationsPage(),
         '/statistics': (context) => StatisticsPage(),
       },
-      initialRoute: '/statistics',
+      initialRoute: '/automations',
     );
   }
 }

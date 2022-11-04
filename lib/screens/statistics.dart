@@ -13,7 +13,7 @@ class StatisticsPage extends StatefulWidget {
 class _StatisticsPageState extends State<StatisticsPage> {
   Map<String, dynamic> mockedData = {
     "food_level": 67.0,
-    "water_level": 85.0,
+    "water_level": 55.0,
     "history": {
       "food": [71, 84, 48, 80, 74, 67],
       "water": [57, 99, 39, 67, 49, 87]
@@ -69,7 +69,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      drawer: SideMenu(),
+      drawer: SideMenu(
+        currentPath: "/statistics",
+      ),
       body: Column(
         children: [
           Container(
@@ -151,7 +153,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             height: 12,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Column(
                 children: [
@@ -414,6 +416,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
       List<CartesianChartSampleData> data) {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
+      backgroundColor: Colors.grey[200],
+      enableAxisAnimation: true,
       primaryXAxis: CategoryAxis(
           majorGridLines: const MajorGridLines(width: 0), isVisible: false),
       primaryYAxis: NumericAxis(
