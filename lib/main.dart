@@ -12,9 +12,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (context) => const HomePage(),
-        '/automations': (context) => const AutomationsPage(),
-        '/statistics': (context) => const StatisticsPage(),
+        '/': (context) => HomePage(),
+        '/automations': (context) => AutomationsPage(),
+        '/statistics': (context) => StatisticsPage(),
       },
       initialRoute: '/statistics',
     );

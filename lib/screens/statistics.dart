@@ -2,15 +2,43 @@ import 'package:flutter/material.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class _ChartData {
-  _ChartData();
-
-  final double foodLevel = 0.64;
-  final double waterLevel = 0.9;
-}
-
 class StatisticsPage extends StatelessWidget {
-  const StatisticsPage({super.key});
+  StatisticsPage({super.key});
+
+  Map<String, dynamic> mockedData = {
+    "food_level": 67.0,
+    "water_level": 99.0,
+    "history": {
+      "food": [71, 84, 48, 80, 74, 67],
+      "water": [57, 99, 39, 67, 49, 87]
+    },
+    "pets": [
+      {
+        "name": "Sierra",
+        "age": "3 years",
+        "status": "Well fed",
+        "weight": "14.65Kg",
+        "image":
+            "https://cdn.arstechnica.net/wp-content/uploads/2022/04/GettyImages-997016774.jpg"
+      },
+      {
+        "name": "Astro",
+        "age": "3 months",
+        "status": "Bad fed",
+        "weight": "640g",
+        "image":
+            "https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn"
+      },
+      {
+        "name": "Sky",
+        "age": "8 years",
+        "status": "Well fed",
+        "weight": "23.4Kg",
+        "image":
+            "https://cdn.britannica.com/49/161649-050-3F458ECF/Bernese-mountain-dog-grass.jpg"
+      }
+    ]
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +82,7 @@ class StatisticsPage extends StatelessWidget {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.5,
                       height: MediaQuery.of(context).size.height * 0.2,
-                      child: _buildElevationDoughnutChart(
-                          67, Color.fromARGB(0, 127, 225, 173)),
+                      child: _getFoodChart(),
                     ),
                   ],
                 ),
@@ -71,8 +98,7 @@ class StatisticsPage extends StatelessWidget {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.5,
                       height: MediaQuery.of(context).size.height * 0.2,
-                      child: _buildElevationDoughnutChart(
-                          90, Color.fromARGB(0, 95, 106, 248)),
+                      child: _getWaterChart(),
                     )
                   ],
                 ),
@@ -111,7 +137,7 @@ class StatisticsPage extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 20),
                 height: MediaQuery.of(context).size.height * 0.2,
                 width: MediaQuery.of(context).size.width * 0.9,
-                child: _buildTrackerColumnChart(),
+                child: _getStatuChart(),
               ),
             ],
           ),
@@ -189,149 +215,138 @@ class StatisticsPage extends StatelessWidget {
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 margin: const EdgeInsets.only(left: 20),
-                child: Table(
-                  border: TableBorder(
-                    horizontalInside: BorderSide(
-                      color: Color.fromRGBO(0, 0, 0, 0.1),
-                      width: 1,
-                    ),
-                  ),
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: [
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TableCell(
-                            child: Text(""),
-                          ),
-                        ),
-                        TableCell(
-                          child: Text(
-                            "Name",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        TableCell(
-                          child: Text(
-                            "Age",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        TableCell(
-                          child: Text(
-                            "Status",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        TableCell(
-                          child: Text(
-                            "Weight",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TableCell(
-                            child: CircleAvatar(
-                                radius: 20,
-                                backgroundImage: NetworkImage(
-                                    "https://cdn.arstechnica.net/wp-content/uploads/2022/04/GettyImages-997016774.jpg")),
-                          ),
-                        ),
-                        TableCell(
-                          child: Text("Sierra"),
-                        ),
-                        TableCell(
-                          child: Text("3 years"),
-                        ),
-                        TableCell(
-                          child: Text("Well fed"),
-                        ),
-                        TableCell(
-                          child: Text("14.65kg"),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TableCell(
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(
-                                  "https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn"),
-                            ),
-                          ),
-                        ),
-                        TableCell(
-                          child: Text("Astro"),
-                        ),
-                        TableCell(
-                          child: Text("3 months"),
-                        ),
-                        TableCell(
-                          child: Text("Bad fed"),
-                        ),
-                        TableCell(
-                          child: Text("640gr"),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TableCell(
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(
-                                  "https://cdn.britannica.com/49/161649-050-3F458ECF/Bernese-mountain-dog-grass.jpg"),
-                            ),
-                          ),
-                        ),
-                        TableCell(
-                          child: Text("Sky"),
-                        ),
-                        TableCell(
-                          child: Text("8 years"),
-                        ),
-                        TableCell(
-                          child: Text("Well fed"),
-                        ),
-                        TableCell(
-                          child: Text("23.4kg"),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                child: _getPetsTable(),
               ),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _getFoodChart() {
+    final foodLevel = mockedData["food_level"];
+    return _buildElevationDoughnutChart(
+        foodLevel, Color.fromARGB(0, 127, 225, 173));
+  }
+
+  Widget _getWaterChart() {
+    final waterLevel = mockedData["water_level"];
+    return _buildElevationDoughnutChart(
+        waterLevel, Color.fromARGB(0, 95, 106, 248));
+  }
+
+  Widget _getStatuChart() {
+    final foodStatus = mockedData["history"]["food"];
+    final waterStatus = mockedData["history"]["water"];
+
+    List<CartesianChartSampleData> status = [];
+
+    for (var i = 0; i < foodStatus.length; i++) {
+      status.add(new CartesianChartSampleData(
+          x: i.toString(),
+          y: foodStatus[i].toDouble(),
+          pointColor: Color.fromARGB(1000, 127, 225, 173)));
+    }
+
+    for (var i = 0; i < waterStatus.length; i++) {
+      status.add(new CartesianChartSampleData(
+          x: (i + 6).toString(),
+          y: waterStatus[i].toDouble(),
+          pointColor: Color.fromARGB(1000, 95, 106, 248)));
+    }
+
+    return _buildTrackerColumnChart(status);
+  }
+
+  Widget _getPetsTable() {
+    final pets = mockedData["pets"];
+
+    List<TableRow> rows = [];
+
+    // Table headers
+    rows.add(TableRow(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          child: Text(""),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            "Name",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            "Age",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            "Status",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            "Weight",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ],
+    ));
+
+    for (var i = 0; i < pets.length; i++) {
+      rows.add(TableRow(children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TableCell(
+            child: CircleAvatar(
+                radius: 20, backgroundImage: NetworkImage(pets[i]["image"])),
+          ),
+        ),
+        TableCell(
+          child: Text(pets[i]["name"]),
+        ),
+        TableCell(
+          child: Text(pets[i]["age"]),
+        ),
+        TableCell(
+          child: Text(pets[i]["status"]),
+        ),
+        TableCell(
+          child: Text(pets[i]["weight"]),
+        ),
+      ]));
+    }
+
+    return Table(
+      border: TableBorder(
+        horizontalInside: BorderSide(
+          color: Color.fromRGBO(0, 0, 0, 0.1),
+          width: 1,
+        ),
+      ),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: rows,
     );
   }
 
@@ -382,7 +397,8 @@ class StatisticsPage extends StatelessWidget {
   }
 
   /// Get column series with track
-  SfCartesianChart _buildTrackerColumnChart() {
+  SfCartesianChart _buildTrackerColumnChart(
+      List<CartesianChartSampleData> data) {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
       primaryXAxis: CategoryAxis(
@@ -394,72 +410,16 @@ class StatisticsPage extends StatelessWidget {
           axisLine: const AxisLine(width: 0),
           majorGridLines: const MajorGridLines(width: 0),
           majorTickLines: const MajorTickLines(size: 0)),
-      series: _getTracker(),
+      series: _getTracker(data),
     );
   }
 
   /// Get column series with tracker
-  List<ColumnSeries<CartesianChartSampleData, String>> _getTracker() {
+  List<ColumnSeries<CartesianChartSampleData, String>> _getTracker(
+      List<CartesianChartSampleData> data) {
     return <ColumnSeries<CartesianChartSampleData, String>>[
       ColumnSeries<CartesianChartSampleData, String>(
-          dataSource: <CartesianChartSampleData>[
-            CartesianChartSampleData(
-                x: 'monday_food',
-                y: 71,
-                pointColor: Color.fromARGB(1000, 127, 225, 173)),
-            CartesianChartSampleData(
-                x: 'tuesday_food',
-                y: 84,
-                pointColor: Color.fromARGB(1000, 127, 225, 173)),
-            CartesianChartSampleData(
-                x: 'wednesday_food',
-                y: 48,
-                pointColor: Color.fromARGB(1000, 127, 225, 173)),
-            CartesianChartSampleData(
-                x: 'thursday_food',
-                y: 80,
-                pointColor: Color.fromARGB(1000, 127, 225, 173)),
-            CartesianChartSampleData(
-                x: 'friday_food',
-                y: 76,
-                pointColor: Color.fromARGB(1000, 127, 225, 173)),
-            CartesianChartSampleData(
-                x: 'saturday_food',
-                y: 60,
-                pointColor: Color.fromARGB(1000, 127, 225, 173)),
-            CartesianChartSampleData(
-                x: 'sunday_food',
-                y: 70,
-                pointColor: Color.fromARGB(1000, 127, 225, 173)),
-            CartesianChartSampleData(
-                x: 'monday_water',
-                y: 50,
-                pointColor: Color.fromARGB(1000, 95, 106, 248)),
-            CartesianChartSampleData(
-                x: 'tuesday_water',
-                y: 60,
-                pointColor: Color.fromARGB(1000, 95, 106, 248)),
-            CartesianChartSampleData(
-                x: 'wednesday_water',
-                y: 70,
-                pointColor: Color.fromARGB(1000, 95, 106, 248)),
-            CartesianChartSampleData(
-                x: 'thursday_water',
-                y: 80,
-                pointColor: Color.fromARGB(1000, 95, 106, 248)),
-            CartesianChartSampleData(
-                x: 'friday_water',
-                y: 90,
-                pointColor: Color.fromARGB(1000, 95, 106, 248)),
-            CartesianChartSampleData(
-                x: 'saturday_water',
-                y: 100,
-                pointColor: Color.fromARGB(1000, 95, 106, 248)),
-            CartesianChartSampleData(
-                x: 'sunday_water',
-                y: 100,
-                pointColor: Color.fromARGB(1000, 95, 106, 248)),
-          ],
+          dataSource: data,
 
           /// We can enable the track for column here.
           isTrackVisible: false,
