@@ -101,7 +101,7 @@ class SideMenu extends StatelessWidget {
         ListTile(
           onTap: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushNamed("/");
+            Navigator.of(context).pushNamed("/pets");
           },
           leading: Icon(
             Icons.pets,

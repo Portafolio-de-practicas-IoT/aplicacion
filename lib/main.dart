@@ -1,6 +1,7 @@
 import 'package:app/screens/actions.dart';
 import 'package:app/screens/automations.dart';
 import 'package:app/screens/home.dart';
+import 'package:app/screens/pets.dart';
 import 'package:app/screens/sign_in.dart';
 import 'package:app/screens/statistics.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       routes: {
         '/': (context) => HomePage(),
-        '/automations': (context) => AutomationsPage(),
+        '/pets': (context) => PetsPage(),
         '/statistics': (context) => StatisticsPage(),
         '/actions': (context) => ActionsPage(),
+        '/automations': (context) => AutomationsPage(),
         '/sign-in': (context) => SignIn(),
       },
       initialRoute: '/statistics',
