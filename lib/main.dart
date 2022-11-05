@@ -1,3 +1,4 @@
+import 'package:app/screens/actions.dart';
 import 'package:app/screens/automations.dart';
 import 'package:app/screens/home.dart';
 import 'package:app/screens/sign_in.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomePage(),
         '/automations': (context) => AutomationsPage(),
         '/statistics': (context) => StatisticsPage(),
+        '/actions': (context) => ActionsPage(),
         '/sign-in': (context) => SignIn(),
       },
       initialRoute: '/statistics',
