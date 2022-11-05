@@ -46,9 +46,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
     ]
   };
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text(
           'Statistics',
@@ -62,7 +65,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             color: Colors.blue,
           ),
           onPressed: () {
-            // TODO: Open the drawer
+            _scaffoldKey.currentState?.openDrawer();
           },
         ),
         backgroundColor: Colors.transparent,

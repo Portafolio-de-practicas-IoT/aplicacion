@@ -1,5 +1,6 @@
 import 'package:app/screens/automations.dart';
 import 'package:app/screens/home.dart';
+import 'package:app/screens/sign_in.dart';
 import 'package:app/screens/statistics.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomePage(),
         '/automations': (context) => AutomationsPage(),
         '/statistics': (context) => StatisticsPage(),
+        '/sign-in': (context) => SignIn(),
       },
-      initialRoute: '/automations',
+      initialRoute: '/statistics',
     );
   }
 }

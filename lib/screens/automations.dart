@@ -48,9 +48,12 @@ class _AutomationsPageState extends State<AutomationsPage> {
     ]
   };
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text(
           'Automations',
@@ -64,7 +67,7 @@ class _AutomationsPageState extends State<AutomationsPage> {
             color: Colors.blue,
           ),
           onPressed: () {
-            // TODO: Open the drawer
+            _scaffoldKey.currentState?.openDrawer();
           },
         ),
         actions: [
