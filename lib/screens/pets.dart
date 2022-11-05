@@ -95,7 +95,16 @@ class PetsPage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // TODO: Go to pet details
+                        Navigator.of(context).pushNamed(
+                          "/pet-settings",
+                          arguments: {
+                            "name": mockedData["pets"][index]["name"],
+                            "age": mockedData["pets"][index]["age"],
+                            "status": mockedData["pets"][index]["status"],
+                            "weight": mockedData["pets"][index]["weight"],
+                            "image": mockedData["pets"][index]["image"],
+                          },
+                        );
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.4,

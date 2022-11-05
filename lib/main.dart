@@ -1,6 +1,7 @@
 import 'package:app/screens/actions.dart';
 import 'package:app/screens/automations.dart';
 import 'package:app/screens/home.dart';
+import 'package:app/screens/pet_settings.dart';
 import 'package:app/screens/pets.dart';
 import 'package:app/screens/sign_in.dart';
 import 'package:app/screens/statistics.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         '/statistics': (context) => StatisticsPage(),
         '/actions': (context) => ActionsPage(),
         '/automations': (context) => AutomationsPage(),
+        '/pet-settings': (context) => PetSettingsPage(),
         '/sign-in': (context) => SignIn(),
       },
       initialRoute: '/statistics',

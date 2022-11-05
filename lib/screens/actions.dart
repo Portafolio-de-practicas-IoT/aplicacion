@@ -140,7 +140,7 @@ class _ActionsPageState extends State<ActionsPage> {
                     textColor: Colors.white,
                     minWidth: 300,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(6),
                     ),
                     onPressed: () {},
                     child: Text(
