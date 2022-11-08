@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../blocs/pet_settings/bloc/pet_settings_bloc.dart';
 
 class SideMenu extends StatelessWidget {
   SideMenu({
@@ -102,6 +105,7 @@ class SideMenu extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pop();
             Navigator.of(context).pushNamed("/pets");
+            BlocProvider.of<PetSettingsBloc>(context).add(LoadPetSettings());
           },
           leading: Icon(
             Icons.pets,
