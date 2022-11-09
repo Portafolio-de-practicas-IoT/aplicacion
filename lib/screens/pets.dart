@@ -2,12 +2,20 @@ import 'package:app/blocs/pet_settings/bloc/pet_settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:image_picker/image_picker.dart';
+
 import '../widgets/side_menu.dart';
 
 class PetsPage extends StatelessWidget {
   PetsPage({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  final ImagePicker _picker = ImagePicker();
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +44,7 @@ class PetsPage extends StatelessWidget {
               color: Colors.blue,
             ),
             onPressed: () {
-              // TODO: Add pet
+              _showDialog(context);
             },
           ),
         ],
@@ -111,7 +119,7 @@ class PetsPage extends StatelessWidget {
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.4,
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.175,
                       child: ClipOval(
                         child: Image.network(
                           pets[index]["image"],
@@ -120,13 +128,86 @@ class PetsPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(pets[index]["name"]),
+                  Text(
+                    pets[index]["name"],
+                    style: TextStyle(fontSize: 16.0),
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             );
           },
         ),
       ],
+    );
+  }
+
+  Future<dynamic> _showDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Add a new pet"),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(25.0))),
+          contentPadding: EdgeInsets.all(22.0),
+          content: _form(context),
+        );
+      },
+    );
+  }
+
+  _form(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: "Name",
+            ),
+          ),
+          TextFormField(
+            controller: _ageController,
+            decoration: InputDecoration(
+              labelText: "Age",
+            ),
+          ),
+          TextFormField(
+            controller: _weightController,
+            decoration: InputDecoration(
+              labelText: "Weight",
+            ),
+          ),
+          MaterialButton(
+            onPressed: () async {
+              final XFile? image =
+                  await _picker.pickImage(source: ImageSource.gallery);
+              // TODO: Upload image to Firebase Storage and get URL
+            },
+            child: Text("Select image"),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              BlocProvider.of<PetSettingsBloc>(context).add(
+                CreatePetEvent(
+                  name: _nameController.text,
+                  age: _ageController.text,
+                  weight: _weightController.text,
+                  image: "https://i.imgur.com/BoN9kdC.png",
+                ),
+              );
+              // TODO: Add pet to database
+            },
+            child: Text("Add"),
+          ),
+        ],
+      ),
     );
   }
 }

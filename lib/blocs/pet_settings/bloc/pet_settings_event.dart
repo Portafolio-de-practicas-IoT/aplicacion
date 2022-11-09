@@ -31,3 +31,24 @@ class EditPetEvent extends PetSettingsEvent {
   String toString() =>
       'EditPetEvent { name: $name, age: $age, status: $status, weight: $weight, image: $image }';
 }
+
+class CreatePetEvent extends PetSettingsEvent {
+  final String name;
+  final String age;
+  final String weight;
+  final String image;
+
+  CreatePetEvent({
+    required this.name,
+    required this.age,
+    required this.weight,
+    required this.image,
+  });
+
+  @override
+  List<Object> get props => [name, age, weight, image];
+
+  @override
+  String toString() =>
+      'CreatePetEvent { name: $name, age: $age, weight: $weight, image: $image }';
+}

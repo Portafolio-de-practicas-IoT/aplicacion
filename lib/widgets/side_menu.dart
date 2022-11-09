@@ -130,7 +130,7 @@ class SideMenu extends StatelessWidget {
         ListTile(
           onTap: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushNamed('/automations');
+            Navigator.of(context).pushNamed('/statistics');
           },
           leading: Icon(
             Icons.bar_chart,
