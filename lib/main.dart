@@ -1,4 +1,5 @@
 import 'package:app/blocs/pet_settings/bloc/pet_settings_bloc.dart';
+import 'package:app/blocs/statistics/bloc/statistics_bloc.dart';
 import 'package:app/screens/actions.dart';
 import 'package:app/screens/automations.dart';
 import 'package:app/screens/home.dart';
@@ -13,6 +14,9 @@ void main() => runApp(MultiBlocProvider(
       providers: [
         BlocProvider<PetSettingsBloc>(
           create: (context) => PetSettingsBloc(),
+        ),
+        BlocProvider<StatisticsBloc>(
+          create: (context) => StatisticsBloc()..add(LoadStatistics()),
         ),
       ],
       child: MyApp(),

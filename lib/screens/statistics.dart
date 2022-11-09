@@ -1,5 +1,7 @@
+import 'package:app/blocs/statistics/bloc/statistics_bloc.dart';
 import 'package:app/widgets/side_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -11,42 +13,9 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  Map<String, dynamic> mockedData = {
-    "food_level": 67.0,
-    "water_level": 55.0,
-    "history": {
-      "food": [71, 84, 48, 80, 74, 67],
-      "water": [57, 99, 39, 67, 49, 87]
-    },
-    "pets": [
-      {
-        "name": "Sierra",
-        "age": "3 years",
-        "status": "Well fed",
-        "weight": "14.65Kg",
-        "image":
-            "https://cdn.arstechnica.net/wp-content/uploads/2022/04/GettyImages-997016774.jpg"
-      },
-      {
-        "name": "Astro",
-        "age": "3 months",
-        "status": "Bad fed",
-        "weight": "640g",
-        "image":
-            "https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn"
-      },
-      {
-        "name": "Sky",
-        "age": "8 years",
-        "status": "Well fed",
-        "weight": "23.4Kg",
-        "image":
-            "https://cdn.britannica.com/49/161649-050-3F458ECF/Bernese-mountain-dog-grass.jpg"
-      }
-    ]
-  };
-
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -75,184 +44,204 @@ class _StatisticsPageState extends State<StatisticsPage> {
       drawer: SideMenu(
         currentPath: "/statistics",
       ),
-      body: Column(
-        children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: _getStatistics(context),
+    );
+  }
+
+  BlocConsumer<StatisticsBloc, StatisticsState> _getStatistics(
+      BuildContext context) {
+    return BlocConsumer<StatisticsBloc, StatisticsState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        if (state is StatisticsLoaded) {
+          return _statistics(state.statistics);
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _statistics(Map<String, dynamic> statistics) {
+    return Column(
+      children: [
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  const Text(
+                    'Food level',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: _getFoodChart(statistics),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  const Text(
+                    'Water level',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: _getWaterChart(statistics),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 20),
+              child: Text(
+                'Week status',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Divider(
+                color: Color.fromRGBO(0, 0, 0, 0.1),
+                thickness: 3,
+                indent: 20,
+                endIndent: 20,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 20),
+              height: MediaQuery.of(context).size.height * 0.2,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: _getStatuChart(statistics),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 12,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
               children: [
-                Column(
+                Row(
                   children: [
-                    const Text(
-                      'Food level',
+                    Text(
+                      "Average time eating",
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: _getFoodChart(),
                     ),
                   ],
                 ),
-                Column(
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
                   children: [
-                    const Text(
-                      'Water level',
+                    Text(
+                      "Average time drinking",
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: _getWaterChart(),
-                    )
                   ],
                 ),
               ],
             ),
-          ),
-          Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 20),
-                child: Text(
-                  'Week status',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "10 min",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Divider(
-                  color: Color.fromRGBO(0, 0, 0, 0.1),
-                  thickness: 3,
-                  indent: 20,
-                  endIndent: 20,
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 20),
-                height: MediaQuery.of(context).size.height * 0.2,
+                Row(
+                  children: [
+                    Text(
+                      "5 times",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+        SizedBox(
+          height: 24,
+        ),
+        Row(
+          children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                child: _getStatuChart(),
+                margin: const EdgeInsets.only(left: 20),
+                child: _getPetsTable(statistics),
               ),
-            ],
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        "Average time eating",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Average time drinking",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        "10 min",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "5 times",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          Row(
-            children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  margin: const EdgeInsets.only(left: 20),
-                  child: _getPetsTable(),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
-  Widget _getFoodChart() {
-    final foodLevel = mockedData["food_level"];
+  Widget _getFoodChart(Map<String, dynamic> statistics) {
+    final foodLevel = statistics["food_level"];
     return _buildElevationDoughnutChart(
         foodLevel, Color.fromARGB(0, 127, 225, 173));
   }
 
-  Widget _getWaterChart() {
-    final waterLevel = mockedData["water_level"];
+  Widget _getWaterChart(Map<String, dynamic> statistics) {
+    final waterLevel = statistics["water_level"];
     return _buildElevationDoughnutChart(
         waterLevel, Color.fromARGB(0, 95, 106, 248));
   }
 
-  Widget _getStatuChart() {
-    final foodStatus = mockedData["history"]["food"];
-    final waterStatus = mockedData["history"]["water"];
+  Widget _getStatuChart(Map<String, dynamic> statistics) {
+    final foodStatus = statistics["history"]["food"];
+    final waterStatus = statistics["history"]["water"];
 
     List<CartesianChartSampleData> status = [];
 
@@ -273,8 +262,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return _buildTrackerColumnChart(status);
   }
 
-  Table _getPetsTable() {
-    final pets = mockedData["pets"];
+  Table _getPetsTable(Map<String, dynamic> statistics) {
+    final pets = statistics["pets"];
 
     Table table = Table(
       border: TableBorder(
