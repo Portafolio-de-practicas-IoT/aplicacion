@@ -20,9 +20,8 @@ class UserAuthRepository {
     return _auth.currentUser != null;
   }
 
-  String? getuid() {
-    print('\x1B[32mcurrent user: ${_auth.currentUser}');
-    return _auth.currentUser?.uid;
+  User? getCurrentUser() {
+    return _auth.currentUser;
   }
 
   Future<void> signOut() async {

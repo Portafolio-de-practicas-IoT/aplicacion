@@ -1,3 +1,5 @@
+import 'package:app/blocs/auth/bloc/auth_bloc.dart';
+import 'package:app/repositories/auth/user_auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -57,7 +59,8 @@ class SideMenu extends StatelessWidget {
                         radius: 50,
                         backgroundColor: Colors.grey[200],
                         backgroundImage: NetworkImage(
-                            "https://websiteandbusiness.com.au/seekedu/wp-content/uploads/2020/12/testimonial-2-woman-hair-photography-portrait.jpg"),
+                          UserAuthRepository().getCurrentUser()!.photoURL!,
+                        ),
                       ),
                     ],
                   ),
@@ -67,7 +70,7 @@ class SideMenu extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Johanna Doe",
+                        UserAuthRepository().getCurrentUser()!.displayName!,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
@@ -81,7 +84,7 @@ class SideMenu extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "johanna@company.com",
+                        UserAuthRepository().getCurrentUser()!.email!,
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w300,
@@ -196,6 +199,25 @@ class SideMenu extends StatelessWidget {
           ),
           title: Text(
             "Automations",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
+        ListTile(
+          onTap: () {
+            BlocProvider.of<AuthBloc>(context).add(
+              SignOutEvent(buildcontext: context),
+            );
+          },
+          leading: Icon(
+            Icons.logout,
+            color: Colors.grey,
+            size: 30,
+          ),
+          title: Text(
+            "Log out",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w300,
