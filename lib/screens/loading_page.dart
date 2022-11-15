@@ -1,6 +1,4 @@
-import 'package:app/blocs/auth/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoadingPage extends StatefulWidget {
@@ -18,6 +16,7 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(64.0),
         child: Column(
@@ -87,7 +86,6 @@ class _LoadingPageState extends State<LoadingPage> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       hintText: "example@email.com",
-                      //labelText: 'example@email.com',
                       hintStyle: TextStyle(
                         fontWeight: FontWeight.w600,
                       ),

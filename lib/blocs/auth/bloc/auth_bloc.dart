@@ -15,6 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<VerifyAuthEvent>(_authVerfication);
     on<GoogleAuthEvent>(_authUser);
     on<SignOutEvent>(_signOut);
+    on<EmailAuthEvent>(_authEmail);
   }
 
   FutureOr<void> _authVerfication(event, emit) {
@@ -54,6 +55,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       print('\x1B[35mAuthenticating user\x1B[0m');
       await _authRepo.signInWithGoogle();
+      print('\x1B[35mAuth success, emiting state\x1B[0m');
+      emit(AuthSuccessState());
+    } catch (e) {
+      print('\x1B[31mAuth error: $e\x1B[0m');
+      emit(AuthErrorState());
+    }
+  }
+
+  FutureOr<void> _authEmail(event, emit) async {
+    emit(AuthAwaitingState());
+    try {
+      print('\x1B[35mAuthenticating user\x1B[0m');
+      await _authRepo.signInWithEmail(event.email, event.password);
       print('\x1B[35mAuth success, emiting state\x1B[0m');
       emit(AuthSuccessState());
     } catch (e) {

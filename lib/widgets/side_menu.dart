@@ -59,7 +59,8 @@ class SideMenu extends StatelessWidget {
                         radius: 50,
                         backgroundColor: Colors.grey[200],
                         backgroundImage: NetworkImage(
-                          UserAuthRepository().getCurrentUser()!.photoURL!,
+                          UserAuthRepository().getCurrentUser()?.photoURL ??
+                              'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png',
                         ),
                       ),
                     ],
@@ -70,7 +71,8 @@ class SideMenu extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        UserAuthRepository().getCurrentUser()!.displayName!,
+                        UserAuthRepository().getCurrentUser()?.displayName ??
+                            'User',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
@@ -84,7 +86,7 @@ class SideMenu extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        UserAuthRepository().getCurrentUser()!.email!,
+                        UserAuthRepository().getCurrentUser()?.email ?? 'Email',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w300,

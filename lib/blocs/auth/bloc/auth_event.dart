@@ -11,6 +11,16 @@ class VerifyAuthEvent extends AuthEvent {}
 
 class AnonymousAuthEvent extends AuthEvent {}
 
+class EmailAuthEvent extends AuthEvent {
+  final String email;
+  final String password;
+
+  const EmailAuthEvent({required this.email, required this.password});
+
+  @override
+  List<Object> get props => [email, password];
+}
+
 class GoogleAuthEvent extends AuthEvent {
   final BuildContext buildcontext;
 

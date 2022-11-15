@@ -18,6 +18,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(64.0),
         child: Column(
@@ -167,7 +168,25 @@ class _SignInState extends State<SignIn> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_emailController.text.isNotEmpty &&
+                          _passwordController.text.isNotEmpty) {
+                        BlocProvider.of<AuthBloc>(context).add(
+                          EmailAuthEvent(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(
+                              content: Text('Please fill in all fields'),
+                            ),
+                          );
+                      }
+                    },
                     child: Text(
                       'Sign in',
                       style: TextStyle(

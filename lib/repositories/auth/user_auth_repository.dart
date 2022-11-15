@@ -29,6 +29,22 @@ class UserAuthRepository {
     await _auth.signOut();
   }
 
+  Future<void> signInWithEmail(email, password) async {
+    try {
+      final user = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+
+      final AuthCredential credential =
+          EmailAuthProvider.credential(email: email, password: password);
+
+      final User currentUser = _auth.currentUser!;
+      final User? updatedUser =
+          (await currentUser.linkWithCredential(credential)).user;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> signInWithGoogle() async {
     final googleUser = await _googleSignIn.signIn();
     final googleAuth = await googleUser!.authentication;
