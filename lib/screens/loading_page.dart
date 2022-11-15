@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class LoadingPage extends StatefulWidget {
+  const LoadingPage({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<LoadingPage> createState() => _LoadingPageState();
 }
 
-class _SignInState extends State<SignIn> {
+class _LoadingPageState extends State<LoadingPage> {
   bool showPassword = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -161,119 +161,16 @@ class _SignInState extends State<SignIn> {
               ],
             ),
             SizedBox(
-              height: 16,
+              height: 128,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Sign in',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 61, 138, 247),
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
+                CircularProgressIndicator(
+                  color: Color.fromARGB(255, 61, 138, 247),
                 ),
               ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                Text(
-                  'or use one of your social accounts',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<AuthBloc>(context).add(
-                        GoogleAuthEvent(buildcontext: context),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/google.png',
-                          width: 24,
-                          height: 24,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 0, 0, 0),
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text('Forgot Password?',
-                      style: TextStyle(
-                          color: Colors.grey[500],
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16)),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/signUp');
-                  },
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 61, 138, 247),
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
+            )
           ],
         ),
       ),
