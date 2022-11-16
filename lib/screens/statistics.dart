@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:app/blocs/statistics/bloc/statistics_bloc.dart';
 import 'package:app/widgets/side_menu.dart';
 import 'package:flutter/material.dart';
@@ -226,13 +228,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget _getFoodChart(Map<String, dynamic> statistics) {
-    final foodLevel = statistics["food_level"];
+    final double foodLevel = statistics["food_level"].toDouble();
     return _buildElevationDoughnutChart(
         foodLevel, Color.fromARGB(0, 127, 225, 173));
   }
 
   Widget _getWaterChart(Map<String, dynamic> statistics) {
-    final waterLevel = statistics["water_level"];
+    final double waterLevel = statistics["water_level"].toDouble();
     return _buildElevationDoughnutChart(
         waterLevel, Color.fromARGB(0, 95, 106, 248));
   }

@@ -14,7 +14,7 @@ class StatisticsLoading extends StatisticsState {}
 class StatisticsLoaded extends StatisticsState {
   final Map<String, dynamic> statistics;
 
-  StatisticsLoaded({required this.statistics});
+  StatisticsLoaded({required Map<String, dynamic> this.statistics});
 
   @override
   List<Object> get props => [statistics];
