@@ -1,5 +1,7 @@
+import 'package:app/blocs/pet_settings/bloc/pet_settings_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../widgets/side_menu.dart';
 
@@ -329,7 +331,39 @@ class PetSettingsPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),
             ),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: ((context) {
+                  return AlertDialog(
+                    title: Text("Delete pet"),
+                    content: Text("Are you sure you want to delete this pet?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          print('Deleting pet');
+                          print('Pet id: ${_args["id"]}');
+                          await FirebaseFirestore.instance
+                              .collection("pets")
+                              .doc(_args["id"])
+                              .delete();
+                          print("Deleted pet");
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Delete"),
+                      ),
+                    ],
+                  );
+                }),
+              );
+            },
             child: Text(
               "Delete this pet",
               style: TextStyle(
@@ -348,7 +382,19 @@ class PetSettingsPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+              BlocProvider.of<PetSettingsBloc>(context).add(
+                LoadPetSettings(),
+              );
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text("Pet updated"),
+                  ),
+                );
+            },
             child: Text(
               "Save",
               style: TextStyle(
