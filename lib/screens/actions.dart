@@ -1,4 +1,6 @@
+import 'package:app/blocs/actions/bloc/actions_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../widgets/side_menu.dart';
 
@@ -12,6 +14,10 @@ class ActionsPage extends StatefulWidget {
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class _ActionsPageState extends State<ActionsPage> {
+  bool _food = false;
+  bool _water = false;
+  bool _sound = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +70,12 @@ class _ActionsPageState extends State<ActionsPage> {
                     Column(
                       children: [
                         Checkbox(
-                          value: true,
-                          onChanged: (value) {},
+                          value: _food,
+                          onChanged: (value) {
+                            setState(() {
+                              _food = value!;
+                            });
+                          },
                         ),
                       ],
                     ),
@@ -87,8 +97,12 @@ class _ActionsPageState extends State<ActionsPage> {
                     Column(
                       children: [
                         Checkbox(
-                          value: true,
-                          onChanged: (value) {},
+                          value: _water,
+                          onChanged: (value) {
+                            setState(() {
+                              _water = value!;
+                            });
+                          },
                         ),
                       ],
                     ),
@@ -110,8 +124,12 @@ class _ActionsPageState extends State<ActionsPage> {
                     Column(
                       children: [
                         Checkbox(
-                          value: false,
-                          onChanged: (value) {},
+                          value: _sound,
+                          onChanged: (value) {
+                            setState(() {
+                              _sound = value!;
+                            });
+                          },
                         ),
                       ],
                     ),
@@ -128,35 +146,81 @@ class _ActionsPageState extends State<ActionsPage> {
                     ),
                   ],
                 ),
+                _actions(context),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 48.0),
-                  child: MaterialButton(
-                    color: Colors.blue,
-                    textColor: Colors.white,
-                    minWidth: 300,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      "Send Actions",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),
+    );
+  }
+
+  BlocConsumer<ActionsBloc, ActionsState> _actions(BuildContext context) {
+    return BlocConsumer<ActionsBloc, ActionsState>(
+      listener: (context, state) {
+        if (state is ActionsError) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+        } else if (state is ActionsSuccess) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text('Actions sent successfully'),
+              ),
+            );
+        }
+      },
+      builder: (context, state) {
+        if (state is ActionsInitial ||
+            state is ActionsSuccess ||
+            state is ActionsError) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 48.0),
+                child: MaterialButton(
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  minWidth: 300,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  onPressed: () {
+                    BlocProvider.of<ActionsBloc>(context).add(SendActions(
+                      food: _food,
+                      water: _water,
+                      sound: _sound,
+                    ));
+                  },
+                  child: Text(
+                    "Send Actions",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 48.0),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
