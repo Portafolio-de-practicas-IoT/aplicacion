@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/actions': (context) => ActionsPage(),
         '/automations': (context) => AutomationsPage(),
         '/pet-settings': (context) => PetSettingsPage(),
+        '/statistics': (context) => StatisticsPage(),
       },
       home: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {},
