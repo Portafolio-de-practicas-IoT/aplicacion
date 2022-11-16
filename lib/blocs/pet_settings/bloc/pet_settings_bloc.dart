@@ -1,54 +1,47 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../repositories/auth/user_auth_repository.dart';
 
 part 'pet_settings_event.dart';
 part 'pet_settings_state.dart';
 
 class PetSettingsBloc extends Bloc<PetSettingsEvent, PetSettingsState> {
-  Map<String, dynamic> mockedData = {
-    "pets": [
-      {
-        "name": "Sierra",
-        "age": "3 years",
-        "status": "Well fed",
-        "weight": "14.65Kg",
-        "image":
-            "https://cdn.arstechnica.net/wp-content/uploads/2022/04/GettyImages-997016774.jpg"
-      },
-      {
-        "name": "Astro",
-        "age": "3 months",
-        "status": "Bad fed",
-        "weight": "640g",
-        "image":
-            "https://www.princeton.edu/sites/default/files/styles/half_2x/public/images/2022/02/KOA_Nassau_2697x1517.jpg?itok=iQEwihUn"
-      },
-      {
-        "name": "Sky",
-        "age": "8 years",
-        "status": "Well fed",
-        "weight": "23.4Kg",
-        "image":
-            "https://cdn.britannica.com/49/161649-050-3F458ECF/Bernese-mountain-dog-grass.jpg"
-      }
-    ]
-  };
-
   PetSettingsBloc() : super(PetSettingsInitial()) {
     on<LoadPetSettings>(_loadPets);
     on<EditPetEvent>(_editPet);
   }
 
-  // TODO: Implement the loadPets method using Firebase
-
-  FutureOr<void> _loadPets(
+  Future<FutureOr<void>> _loadPets(
     LoadPetSettings event,
     Emitter<PetSettingsState> emit,
-  ) {
+  ) async {
     emit(PetSettingsLoading());
 
-    emit(PetSettingsLoaded(pets: mockedData["pets"]));
+    String useruid = UserAuthRepository.userInstance?.currentUser?.uid ?? "";
+    if (useruid == "") {
+      print("\t\tUser not authenticated");
+      emit(PetSettingsError(message: "User not authenticated"));
+      return null;
+    }
+
+    final QuerySnapshot pets = await FirebaseFirestore.instance
+        .collection('pets')
+        .where('useruid', isEqualTo: useruid)
+        .get();
+
+    final List<DocumentSnapshot> petsDocuments = pets.docs;
+
+    final List<dynamic> petsData = petsDocuments
+        .map((DocumentSnapshot documentSnapshot) => <String, dynamic>{
+              "id": documentSnapshot.id,
+              ...documentSnapshot.data()! as Map<String, dynamic>,
+            })
+        .toList();
+
+    emit(PetSettingsLoaded(pets: petsData));
   }
 
   FutureOr<void> _editPet(
@@ -57,6 +50,6 @@ class PetSettingsBloc extends Bloc<PetSettingsEvent, PetSettingsState> {
   ) {
     emit(PetSettingsLoading());
 
-    emit(PetSettingsLoaded(pets: mockedData["pets"]));
+    emit(PetSettingsLoaded(pets: []));
   }
 }

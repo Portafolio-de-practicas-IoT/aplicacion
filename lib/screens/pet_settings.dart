@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/side_menu.dart';
@@ -6,6 +7,7 @@ class PetSettingsPage extends StatelessWidget {
   PetSettingsPage({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +15,7 @@ class PetSettingsPage extends StatelessWidget {
     _args as Map<String, dynamic>;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       appBar: AppBar(
         title: const Text(
@@ -66,6 +69,51 @@ class PetSettingsPage extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
+              IconButton(
+                icon: Icon(
+                  Icons.edit,
+                  color: Colors.blue,
+                ),
+                onPressed: () {
+                  _nameController.text = _args["name"];
+                  showDialog(
+                      context: context,
+                      builder: ((context) {
+                        return AlertDialog(
+                          title: Text("Edit name"),
+                          content: TextField(
+                            controller: _nameController,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("Cancel"),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                print(
+                                    'Updating pet name to ${_nameController.text}');
+                                print('Pet id: ${_args["id"]}');
+                                await FirebaseFirestore.instance
+                                    .collection("pets")
+                                    .doc(_args["id"])
+                                    .update({
+                                  "name": _nameController.text,
+                                });
+                                print("Updated pet name");
+                                _args["name"] = _nameController.text;
+
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("Save"),
+                            ),
+                          ],
+                        );
+                      }));
+                },
+              ),
             ],
           ),
           SizedBox(
@@ -97,17 +145,20 @@ class PetSettingsPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            // TODO: Get value from database
-                            "430gr",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(
+                                "430gr",
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -125,13 +176,64 @@ class PetSettingsPage extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            _args["age"],
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
+                          child: Row(
+                            children: [
+                              Text(
+                                _args["age"],
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () {
+                                  _nameController.text = _args["age"];
+                                  showDialog(
+                                    context: context,
+                                    builder: ((context) {
+                                      return AlertDialog(
+                                        title: Text("Edit age"),
+                                        content: TextField(
+                                          controller: _nameController,
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Cancel"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              print(
+                                                  'Updating pet age to ${_nameController.text}');
+                                              print('Pet id: ${_args["id"]}');
+                                              await FirebaseFirestore.instance
+                                                  .collection("pets")
+                                                  .doc(_args["id"])
+                                                  .update({
+                                                "age": _nameController.text,
+                                              });
+                                              print("Updated pet age");
+                                              _args["age"] =
+                                                  _nameController.text;
+
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Save"),
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -150,13 +252,64 @@ class PetSettingsPage extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            _args["weight"],
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
+                          child: Row(
+                            children: [
+                              Text(
+                                _args["weight"],
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () {
+                                  _nameController.text = _args["weight"];
+                                  showDialog(
+                                    context: context,
+                                    builder: ((context) {
+                                      return AlertDialog(
+                                        title: Text("Edit weight"),
+                                        content: TextField(
+                                          controller: _nameController,
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Cancel"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              print(
+                                                  'Updating pet weight to ${_nameController.text}');
+                                              print('Pet id: ${_args["id"]}');
+                                              await FirebaseFirestore.instance
+                                                  .collection("pets")
+                                                  .doc(_args["id"])
+                                                  .update({
+                                                "weight": _nameController.text,
+                                              });
+                                              print("Updated pet weight");
+                                              _args["weight"] =
+                                                  _nameController.text;
+
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Save"),
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ],

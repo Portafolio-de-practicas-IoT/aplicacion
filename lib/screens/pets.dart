@@ -106,6 +106,8 @@ class PetsPage extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      print('Adding arguments to route');
+                      print(pets[index]);
                       Navigator.of(context).pushNamed(
                         "/pet-settings",
                         arguments: {
@@ -114,6 +116,7 @@ class PetsPage extends StatelessWidget {
                           "status": pets[index]["status"],
                           "weight": pets[index]["weight"],
                           "image": pets[index]["image"],
+                          "id": pets[index]["id"],
                         },
                       );
                     },
