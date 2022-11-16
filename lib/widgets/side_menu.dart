@@ -1,4 +1,6 @@
+import 'package:app/blocs/actions/bloc/actions_bloc.dart';
 import 'package:app/blocs/auth/bloc/auth_bloc.dart';
+import 'package:app/blocs/automations/bloc/automations_bloc.dart';
 import 'package:app/repositories/auth/user_auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -186,6 +188,7 @@ class SideMenu extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pop();
             Navigator.of(context).pushNamed('/automations');
+            BlocProvider.of<AutomationsBloc>(context).add(LoadAutomations());
           },
           leading: Icon(
             Icons.timer,

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:app/blocs/automations/bloc/automations_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../widgets/side_menu.dart';
 
@@ -86,65 +88,11 @@ class _AutomationsPageState extends State<AutomationsPage> {
       drawer: SideMenu(
         currentPath: "/automations",
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: _getAlarms(),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              color: Colors.grey[200],
-              height: 65,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Notify me when my pet is",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: _getActions(0, 2),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              color: Colors.grey[200],
-              height: 65,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Other",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: _getActions(2, 3),
-            ),
-          ],
-        ),
-      ),
+      body: _automations(),
     );
   }
 
-  Widget _getActions(from, to) {
-    final actions = _mockedData["settings"];
-
+  Widget _getActions(from, to, actions) {
     final Table table = Table(
       border: TableBorder(
         horizontalInside: BorderSide(
@@ -193,9 +141,7 @@ class _AutomationsPageState extends State<AutomationsPage> {
     return rows;
   }
 
-  Widget _getAlarms() {
-    final alarms = _mockedData["alarms"] as List<dynamic>;
-
+  Widget _getAlarms(List<dynamic> alarms) {
     final Table table = Table(
       border: TableBorder(
         horizontalInside: BorderSide(
@@ -253,5 +199,84 @@ class _AutomationsPageState extends State<AutomationsPage> {
     }
 
     return rows;
+  }
+
+  BlocConsumer<AutomationsBloc, AutomationsState> _automations() {
+    return BlocConsumer<AutomationsBloc, AutomationsState>(
+      listener: (context, state) {
+        if (state is AutomationsError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        print(state.toString());
+        if (state is AutomationsLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is AutomationsLoaded) {
+          print("AUTOMATIONS: ${state.automations}");
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: _getAlarms(state.automations["alarms"]),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey[200],
+                  height: 65,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Notify me when my pet is",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: _getActions(0, 2, state.automations["settings"]),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.grey[200],
+                  height: 65,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Other",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: _getActions(2, 3, state.automations["settings"]),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 }

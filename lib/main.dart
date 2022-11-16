@@ -1,4 +1,5 @@
 import 'package:app/blocs/auth/bloc/auth_bloc.dart';
+import 'package:app/blocs/automations/bloc/automations_bloc.dart';
 import 'package:app/blocs/pet_settings/bloc/pet_settings_bloc.dart';
 import 'package:app/blocs/statistics/bloc/statistics_bloc.dart';
 import 'package:app/screens/actions.dart';
@@ -31,6 +32,9 @@ Future<void> main() async {
         ),
         BlocProvider<ActionsBloc>(
           create: (context) => ActionsBloc(),
+        ),
+        BlocProvider<AutomationsBloc>(
+          create: (context) => AutomationsBloc(),
         ),
       ],
       child: MyApp(),
