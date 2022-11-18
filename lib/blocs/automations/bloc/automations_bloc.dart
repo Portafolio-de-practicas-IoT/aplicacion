@@ -12,7 +12,6 @@ class AutomationsBloc extends Bloc<AutomationsEvent, AutomationsState> {
   AutomationsBloc() : super(AutomationsInitial()) {
     on<LoadAutomations>(_loadAutomations);
     on<CreateAutomation>(_createAutomation);
-    on<EditAutomation>(_editAutomation);
     on<DeleteAutomation>(_deleteAutomation);
     on<ToggleAutomation>(_toggleAutomation);
   }
@@ -110,10 +109,6 @@ class AutomationsBloc extends Bloc<AutomationsEvent, AutomationsState> {
     print("\t\tAdded alarm to automations");
 
     emit(AutomationsCreated());
-  }
-
-  FutureOr<void> _editAutomation(event, emit) async {
-    // TODO: implement event handler
   }
 
   FutureOr<void> _deleteAutomation(event, emit) async {
