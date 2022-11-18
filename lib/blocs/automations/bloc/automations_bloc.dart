@@ -162,6 +162,16 @@ class AutomationsBloc extends Bloc<AutomationsEvent, AutomationsState> {
   }
 
   FutureOr<void> _toggleAutomation(event, emit) async {
-    // TODO: implement event handler
+    print(
+        "[AutomationsBloc] Toggling automation ${event.id} to ${event.enabled}");
+
+    final DocumentReference alarmRef =
+        FirebaseFirestore.instance.collection('alarms').doc(event.id);
+
+    alarmRef.update({
+      "enabled": event.enabled,
+    });
+
+    emit(AutomationsToggled());
   }
 }

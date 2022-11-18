@@ -15,6 +15,8 @@ class AutomationsCreated extends AutomationsState {}
 
 class AutomationsDeleted extends AutomationsState {}
 
+class AutomationsToggled extends AutomationsState {}
+
 class AutomationsLoaded extends AutomationsState {
   final Map<String, dynamic> automations;
 

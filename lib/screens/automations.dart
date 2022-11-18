@@ -20,9 +20,6 @@ class _AutomationsPageState extends State<AutomationsPage> {
 
   final TextEditingController _automationNameController =
       TextEditingController();
-  bool _food = false;
-  bool _water = false;
-  bool _sound = false;
 
   int _selectedAction = 0;
   int _selectedDays = 0;
@@ -193,7 +190,12 @@ class _AutomationsPageState extends State<AutomationsPage> {
                   child: CupertinoSwitch(
                     value: alarm["enabled"],
                     onChanged: (value) {
-                      // TODO: Update the alarm
+                      BlocProvider.of<AutomationsBloc>(context).add(
+                        ToggleAutomation(
+                          id: alarm.id,
+                          enabled: value,
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -235,6 +237,8 @@ class _AutomationsPageState extends State<AutomationsPage> {
                 content: Text("Automation deleted"),
               ),
             );
+          BlocProvider.of<AutomationsBloc>(context).add(LoadAutomations());
+        } else if (state is AutomationsToggled) {
           BlocProvider.of<AutomationsBloc>(context).add(LoadAutomations());
         }
       },
