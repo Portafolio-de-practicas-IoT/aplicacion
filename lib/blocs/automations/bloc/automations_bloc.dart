@@ -117,7 +117,48 @@ class AutomationsBloc extends Bloc<AutomationsEvent, AutomationsState> {
   }
 
   FutureOr<void> _deleteAutomation(event, emit) async {
-    // TODO: implement event handler
+    print("[AutomationsBloc] Deleting automation");
+
+    String useruid = UserAuthRepository.userInstance?.currentUser?.uid ?? "";
+
+    if (useruid == "") {
+      print("\t\tUser not authenticated");
+      emit(AutomationsError(message: "User not authenticated"));
+      return null;
+    }
+    print("\t\tUser authenticated");
+
+    final QuerySnapshot automations = await FirebaseFirestore.instance
+        .collection('automations')
+        .where('useruid', isEqualTo: useruid)
+        .get();
+    print("\t\tLoaded ${automations.docs.length} automations");
+
+    final List<DocumentSnapshot> automationsDocuments = automations.docs;
+    print("\t\tLoaded ${automationsDocuments.length} automations");
+
+    String automationId = automationsDocuments[0].id;
+    print("\t\tAutomation id: $automationId");
+
+    final DocumentReference automationsRef =
+        FirebaseFirestore.instance.collection('automations').doc(automationId);
+    print("\t\tAutomation ref: $automationsRef");
+
+    automationsRef.update({
+      "alarms": FieldValue.arrayRemove([event.id])
+    });
+
+    print("\t\tRemoved alarm from automations");
+
+    final DocumentReference alarmRef =
+        FirebaseFirestore.instance.collection('alarms').doc(event.id);
+    print("\t\tAlarm ref: $alarmRef");
+
+    await alarmRef.delete();
+
+    print("\t\tDeleted alarm");
+
+    emit(AutomationsDeleted());
   }
 
   FutureOr<void> _toggleAutomation(event, emit) async {

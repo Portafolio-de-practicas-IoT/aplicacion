@@ -159,32 +159,45 @@ class _AutomationsPageState extends State<AutomationsPage> {
 
       final TableRow row = TableRow(
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Text(
-              alarm["time"],
-              style: const TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Text(
-              alarm["type"],
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: CupertinoSwitch(
-              value: alarm["enabled"],
-              onChanged: (value) {
-                // TODO: Update the alarm
-              },
+          GestureDetector(
+            onLongPress: () {
+              _showDeleteAutomationDialog(context, alarm.id);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Text(
+                    alarm["time"],
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Text(
+                    alarm["type"],
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: CupertinoSwitch(
+                    value: alarm["enabled"],
+                    onChanged: (value) {
+                      // TODO: Update the alarm
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -211,6 +224,15 @@ class _AutomationsPageState extends State<AutomationsPage> {
             ..showSnackBar(
               SnackBar(
                 content: Text("Automation created"),
+              ),
+            );
+          BlocProvider.of<AutomationsBloc>(context).add(LoadAutomations());
+        } else if (state is AutomationsDeleted) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text("Automation deleted"),
               ),
             );
           BlocProvider.of<AutomationsBloc>(context).add(LoadAutomations());
@@ -455,9 +477,14 @@ class _AutomationsPageState extends State<AutomationsPage> {
                               ? "Weekdays"
                               : "Weekends";
                       String amOrPm = _selectedTime.hour > 12 ? "PM" : "AM";
-                      String time = _selectedTime.hour.toString() +
+                      String hour = _selectedTime.hour > 12
+                          ? (_selectedTime.hour - 12).toString()
+                          : _selectedTime.hour.toString();
+
+                      String time = hour +
                           ":" +
                           _selectedTime.minute.toString() +
+                          " " +
                           amOrPm;
 
                       print("Creating new automation with name: " +
@@ -498,6 +525,47 @@ class _AutomationsPageState extends State<AutomationsPage> {
               ],
             );
           }),
+        );
+      }),
+    );
+  }
+
+  void _showDeleteAutomationDialog(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: ((BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(25.0))),
+          contentPadding: EdgeInsets.all(22.0),
+          title: Text("Delete automation"),
+          content: Text("Are you sure you want to delete this automation?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                BlocProvider.of<AutomationsBloc>(context).add(
+                  DeleteAutomation(
+                    id: id,
+                  ),
+                );
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text("Deleting automation..."),
+                    ),
+                  );
+                Navigator.of(context).pop();
+              },
+              child: Text("Delete"),
+            ),
+          ],
         );
       }),
     );
