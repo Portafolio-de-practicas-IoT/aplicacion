@@ -11,21 +11,23 @@ class LoadAutomations extends AutomationsEvent {}
 
 class CreateAutomation extends AutomationsEvent {
   final String name;
-  final DateTime time;
-  final bool enabled;
+  final String type;
+  final String days;
+  final String time;
 
-  CreateAutomation({
+  const CreateAutomation({
     required this.name,
+    required this.type,
+    required this.days,
     required this.time,
-    required this.enabled,
   });
 
   @override
-  List<Object> get props => [name, time, enabled];
+  List<Object> get props => [name, type, days, time];
 
   @override
   String toString() =>
-      'CreateAutomation { name: $name, time: $time, enabled: $enabled }';
+      'CreateAutomation { name: $name, type: $type, days: $days, time: $time }';
 }
 
 class EditAutomation extends AutomationsEvent {
