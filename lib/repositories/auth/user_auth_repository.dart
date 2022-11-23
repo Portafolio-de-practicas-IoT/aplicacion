@@ -29,20 +29,23 @@ class UserAuthRepository {
     await _auth.signOut();
   }
 
-  Future<void> signInWithEmail(email, password) async {
+  Future<bool> signInWithEmail(email, password) async {
     try {
-      final user = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-
-      final AuthCredential credential =
-          EmailAuthProvider.credential(email: email, password: password);
-
-      final User currentUser = _auth.currentUser!;
-      final User? updatedUser =
-          (await currentUser.linkWithCredential(credential)).user;
-    } catch (e) {
-      print(e);
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      print(_auth.currentUser!.uid);
+      // TODO: Add user to database
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        return false;
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+        return false;
+      }
     }
+    return false;
   }
 
   Future<void> signInWithGoogle() async {
