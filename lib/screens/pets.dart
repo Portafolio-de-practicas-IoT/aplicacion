@@ -85,6 +85,7 @@ class PetsPage extends StatelessWidget {
   }
 
   Widget _petGrid(List<dynamic> pets) {
+    if (pets.length == 0) return Container(child: Center(child:Text("No pets found")));
     return Column(
       children: [
         GridView.builder(

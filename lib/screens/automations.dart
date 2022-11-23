@@ -103,7 +103,7 @@ class _AutomationsPageState extends State<AutomationsPage> {
             Container(
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               child: CupertinoSwitch(
-                value: action.values.first,
+                value: action.values.first == "true",
                 onChanged: (value) async {
                   // TODO: Fix this
                   setState(() {});

@@ -75,6 +75,43 @@ class UserAuthRepository {
           'username': user.displayName,
           'profilePicture': user.photoURL,
           'email': user.email,
+          'pet_distance': 0,
+          'statistics': {
+            'food_level': 0,
+            'water_level': 0,
+            'history': {
+              'food': [0, 0, 0, 0, 0, 0],
+              'water': [0, 0, 0, 0, 0, 0],
+            }
+          }
+        });
+
+        // Create automations document
+        FirebaseFirestore.instance.collection('automations').add({
+          'useruid': user.uid,
+          'alarms': [],
+          'settings': [
+            {
+              'name': 'Eating',
+              'value': false,
+            },
+            {
+              'name': 'Drinking',
+              'value': false,
+            },
+            {
+              'name': 'Make sound to eat',
+              'value': false,
+            },
+          ],
+        });
+
+        // Create actions document
+        FirebaseFirestore.instance.collection('actions').add({
+          'useruid': user.uid,
+          'food': false,
+          'water': false,
+          'sound': false,
         });
       }
     } else {
